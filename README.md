@@ -12,3 +12,6 @@ Open the file _PowerBI/Camerai.pbix_ in using PowerBI program to find our dashbo
 
 ## Admin Panel
 TODO
+
+## 3D Models
+You can use our 3D models to print/built a case for the Camerai device.
