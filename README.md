@@ -11,7 +11,7 @@ TODO
 Open the file _PowerBI/Camerai.pbix_ in using PowerBI program to find our dashboard.
 
 ## Admin Panel
-TODO
+The admin panel can be hosted on a webserver of choice.
 
 ## 3D Models
 You can use our 3D models to print/built a case for the Camerai device.
