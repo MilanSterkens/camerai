@@ -1,0 +1,47 @@
+<div class="grid grid-cols-3 gap-4">
+  <div class="col-span-2">
+    <h1 class="mb-4 text-3xl font-extrabold text-blue-900 md:text-5xl lg:text-6xl">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">CamerAI</span> Admin
+      Dashboard</h1>
+  </div>
+  <div>
+    <app-navigation></app-navigation>
+  </div>
+</div>
+<button (click)="addNewUser()" type="button"
+        class="mt-12 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+  Add User
+</button>
+<div class="mt-2 relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-6 py-3">
+        Email Address
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Remove
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr *ngFor="let user of users" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        {{user.email}}
+      </th>
+      <td class="px-6 py-4">
+        <div class="w-7 cursor-pointer" (click)="deleteUser(user.id)">
+          <svg fill="red" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                  d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"></path>
+          </svg>
+        </div>
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+
+</div>

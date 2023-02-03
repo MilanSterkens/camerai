@@ -1,0 +1,142 @@
+<div class="grid grid-cols-3 gap-4">
+  <div class="col-span-2">
+    <h1 class="mb-4 text-3xl font-extrabold text-blue-900 md:text-5xl lg:text-6xl">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">CamerAI</span> Admin
+      Dashboard</h1>
+  </div>
+  <div>
+    <app-navigation></app-navigation>
+  </div>
+</div>
+
+<button (click)="toggleDropdown()"
+        class="relative inline-flex items-center justify-center p-0.5 mt-7 mb-3 overflow-hidden text-sm font-medium text-gray-900 rounded-lg
+        group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white
+        focus:ring-4 focus:outline-none focus:ring-cyan-200 focus:ring-cyan-800">
+  <span
+    class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white bg-gray-900 rounded-md group-hover:bg-opacity-0 text-white">
+    <div class="flex justify-center items-center">
+      <div *ngIf="selectedDevice != null">
+                {{selectedDevice.uniqueId}}
+      </div>
+      <div *ngIf="selectedDevice == null">
+            Select a Device
+      </div>
+    </div>
+  </span>
+</button>
+<div [ngClass]="{'hidden': toggle, 'block': !toggle}"
+     class="absolute z-10 bg-white rounded divide-gray-100 shadow-2xl dark:bg-gray-900 bg-gray-900">
+  <div *ngFor="let device of devices">
+    <div *ngIf="device.id < 50">
+      <ul class="py-1 text-sm text-gray-700 bg-gray-800 text-gray-200 border-t">
+        <li (click)="clickDevice(device.id)" name="selectedDevice" value="{{device.id}}" class="cursor-pointer">
+          <a
+            class="block py-1 px-4 hover:bg-gray-100 text-sm hover:bg-gray-600 hover:text-white">{{device.uniqueId}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="selectedDevice">
+  <button (click)="toggleDropdownLocation()"
+          class="relative inline-flex items-center justify-center p-0.5 mt-7 mb-3 overflow-hidden text-sm font-medium text-gray-900 rounded-lg
+        group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white
+        focus:ring-4 focus:outline-none focus:ring-cyan-200 focus:ring-cyan-800">
+  <span
+    class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white bg-gray-900 rounded-md group-hover:bg-opacity-0 text-white">
+    <div class="flex justify-center items-center">
+      <div *ngIf="selectedLat != 0 && selectedLong != 0">
+                {{selectedLat}}, {{selectedLong}}
+      </div>
+      <div *ngIf="selectedLat == 0 && selectedLong == 0">
+            Select a Location
+      </div>
+    </div>
+  </span>
+  </button>
+  <div [ngClass]="{'hidden': toggleLocation, 'block': !toggleLocation}"
+       class="absolute z-10 bg-white rounded divide-gray-100 shadow-2xl dark:bg-gray-900 bg-gray-900">
+    <div *ngFor="let location of latLong; let last = last">
+      <ul class="py-1 text-sm text-gray-700 bg-gray-800 text-gray-200 border-t" [ngClass]="{'last-ul': last}">
+        <li (click)="clickLocation(location.latitude, location.longitude)"
+            class="cursor-pointer">
+          <a
+            class="block py-1 px-4 hover:bg-gray-100 text-sm hover:bg-gray-600 hover:text-white">{{location.latitude}}, {{location.longitude}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div #map *ngIf="selectedLong" class="z-0 w-full h-64 mt-4" leaflet [leafletOptions]="options"
+     [leafletLayers]="options.layers">
+</div>
+
+
+<div *ngIf="selectedLong">
+  <form class="mt-8">
+    <ul
+      class="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white py-8 px-6">
+      <li class="w-full px-6 py-3 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+        Longitude: {{selectedDevice.longitude}}</li>
+      <li class="w-full px-6 py-3 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+        Latitude: {{selectedDevice.latitude}}</li>
+      <div class="p-6">
+        <div class="grid md:grid-cols-2 md:gap-6">
+          <div class="relative z-0 w-full mb-6 group">
+            <input type="number" name="car" id="car" min="0" value="{{maxSpeedCar}}" [(ngModel)]="maxSpeedCar" [readonly]="!isLastLocation"
+                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="car"
+                   class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Maximum speed car
+            </label>
+          </div>
+          <div class="relative z-0 w-full mb-6 group">
+            <input type="number" name="bus" id="bus" min="0" value="{{maxSpeedBus}}" [(ngModel)]="maxSpeedBus" [readonly]="!isLastLocation"
+                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="bus"
+                   class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Maximum speed bus
+            </label>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 md:gap-6">
+          <div class="relative z-0 w-full mb-6 group">
+            <input type="number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="bike" id="bike" min="0"
+                   value="{{maxSpeedBike}}" [(ngModel)]="maxSpeedBike" [readonly]="!isLastLocation"
+                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="bike"
+                   class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Maximum speed bike
+            </label>
+          </div>
+          <div class="relative z-0 w-full mb-6 group">
+            <input type="number" name="motorcycle" id="motorcycle" min="0" value="{{maxSpeedMotorcycle}}" [readonly]="!isLastLocation"
+                   [(ngModel)]="maxSpeedMotorcycle"
+                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="motorcycle"
+                   class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Maximum speed motorcycle
+            </label>
+          </div>
+        </div>
+        <button *ngIf="isLastLocation" (click)="submitMaxSpeed()" type="submit"
+                class="inline-flex items-center justify-center p-0.5 text-sm font-medium rounded-lg group bg-gradient-to-br
+                from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white text-white focus:ring-4 focus:outline-none
+                focus:ring-cyan-800 mt-3">
+              <span
+                class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                Update Maximum Speed
+              </span>
+        </button>
+      </div>
+    </ul>
+  </form>
+
+</div>
