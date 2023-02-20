@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import serial
 import RPi.GPIO as GPIO
 import time
+import os
 
 import logging
 
@@ -10,11 +11,17 @@ import logging
 class AtModem(object):
     powerKey = 4
     logger = None
+    backend = ''
 
     def __init__(self):
         self.logger = logging.getLogger('main')
         self.__install_device()
         self.__open()
+        try:
+            self.backend = os.getenv('BACKEND')
+            print('BACKEND environment variable exists')
+        except KeyError:
+            print('BACKEND environment variable does not exist')
 
     def __install_device(self):
         self.logger.info('SIM7080X is starting')
@@ -61,7 +68,7 @@ class AtModem(object):
         self.sendAt('AT+CNACT=0,1', 'OK')
         self.sendAt('AT+CSSLCFG="sslversion",1,3', 'OK')
         self.sendAt('AT+SHSSL=1,""', 'OK')
-        self.sendAt('AT+SHCONF="URL","https://camerai-api.azurewebsites.net"', 'OK')
+        self.sendAt('AT+SHCONF="URL","' + self.backend + '"', 'OK')
         self.sendAt('AT+SHCONF="BODYLEN",4096', 'OK')
         self.sendAt('AT+SHCONF="HEADERLEN",350', 'OK')
         self.sendAt('AT+SHCONN', 'OK', 20)

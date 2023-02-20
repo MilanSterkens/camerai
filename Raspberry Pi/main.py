@@ -6,11 +6,13 @@ import uuid
 from loggingHelper import LoggingHelper
 from atModem import AtModem
 from aiDetection import AiDetection
+from dotenv import load_dotenv
 
 UPLOAD_TIME = "04:00"
 RETRY_INTERVAL = 1
 
 logger = LoggingHelper.configure()
+load_dotenv()
 
 dbHelper = databaseHelper.DatabaseHelper()
 
